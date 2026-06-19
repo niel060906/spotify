@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getTrending, searchMusic } from '../services/api';
+import { getTrending, MOCK_DATA } from '../services/api';
 import { usePlayerStore } from '../store';
 import { Play } from 'lucide-react';
 
@@ -12,12 +12,12 @@ export default function Home() {
     useEffect(() => {
         const fetchInitial = async () => {
             try {
-                // Since this might fail in preview, let's gracefully handle
                 const data = await getTrending();
                 setTrending(data);
             } catch (err) {
                 console.error(err);
                 setError("Could not load trending right now.");
+                setTrending(MOCK_DATA.trending);
             } finally {
                 setLoading(false);
             }

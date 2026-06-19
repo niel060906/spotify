@@ -1,6 +1,6 @@
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
-const MOCK_DATA = {
+export const MOCK_DATA = {
   trending: {
     top_songs: [
       { video_id: 'm1', title: 'Midnight City', artist: 'M83', duration: 243, thumbnail: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=300&q=80' },
@@ -41,10 +41,11 @@ export const fetchApi = async (endpoint, options = {}) => {
         ...options.headers,
       },
     });
-    if (!response.ok) {
-        throw new Error(`API error: ${response.status}`);
+    const data = await response.json();
+    if (!response.ok || data?.error) {
+        throw new Error(data?.error || `API error: ${response.status}`);
     }
-    return await response.json();
+    return data;
   } catch (error) {
     // If running in preview mode without Python backend, return mock data silently
     if (endpoint === '/trending') return MOCK_DATA.trending;

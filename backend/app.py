@@ -1,4 +1,5 @@
 import os
+import traceback
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from modules.database import init_db, get_connection
@@ -31,6 +32,8 @@ def trending():
     try:
         return jsonify(get_trending())
     except Exception as e:
+        print(f"Error in /api/trending: {e}")
+        traceback.print_exc()
         return jsonify({"error": str(e)}), 500
 
 @app.route('/api/charts', methods=['GET'])
